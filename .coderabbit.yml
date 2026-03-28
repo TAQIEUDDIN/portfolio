@@ -7,5 +7,4 @@ reviews:
     drafts: false
     base_branches:
       - ".*"
-    review_level: detailed
   
