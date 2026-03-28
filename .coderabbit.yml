@@ -1,0 +1,13 @@
+language: "en-us"
+
+
+reviews:
+  auto_review:
+    enabled: true
+
+rules:
+  - name: "Best Practices"
+  - name: "Performance"
+  - name: "Security"
+
+
