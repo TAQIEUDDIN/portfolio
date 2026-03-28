@@ -4,11 +4,8 @@ language: "en-US"
 reviews:
   auto_review:
     enabled: true
+    drafts: false
     base_branches:
       - ".*"
     review_level: detailed
-
-rules:
-  - name: "Best Practices"
-  - name: "Performance"
-  - name: "Security"
+  
