@@ -1,9 +1,11 @@
-language: "en-us"
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
 
 
 reviews:
   auto_review:
     enabled: true
+    base_branches: ["main", "staging"]
 
 rules:
   - name: "Best Practices"
