@@ -4,6 +4,11 @@ language: "en-US"
 reviews:
   auto_review:
     enabled: true
-    # The ".*" is a regular expression that matches every branch name
     base_branches:
       - ".*"
+    review_level: detailed
+
+rules:
+  - name: "Best Practices"
+  - name: "Performance"
+  - name: "Security"
