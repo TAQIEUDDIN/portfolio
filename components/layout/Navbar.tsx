@@ -43,16 +43,16 @@ export default function Navbar() {
         className="pointer-events-auto flex items-center justify-between"
         animate={{
           backgroundColor: scrolled
-            ? "rgba(255, 255, 255, 0.92)"
-            : "rgba(0, 0, 0, 0.2)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
+            ? "rgba(255, 255, 255, 0.95)"
+            : "rgba(0, 0, 0, 0)",
+          backdropFilter: scrolled ? "blur(16px)" : "blur(0px)",
           boxShadow: scrolled
             ? "0 4px 24px rgba(0, 0, 0, 0.08)"
             : "none",
           borderRadius: scrolled ? 9999 : 0,
-          paddingTop: scrolled ? 8 : 20,
-          paddingBottom: scrolled ? 8 : 20,
+          color: scrolled ? "#225a3b" : "#ffffff",
+          paddingTop: scrolled ? 8 : 14,
+          paddingBottom: scrolled ? 8 : 14,
           paddingLeft: scrolled ? 24 : 48,
           paddingRight: scrolled ? 24 : 48,
           marginTop: scrolled ? 12 : 0,
@@ -75,13 +75,13 @@ export default function Navbar() {
         <motion.span
           className="font-bold cursor-pointer whitespace-nowrap"
           animate={{
-            color: scrolled ? "#1a1a1a" : "#ffffff",
-            fontSize: scrolled ? "14px" : "16px",
+            color: scrolled ? "#225a3b" : "#ffffff",
+            fontSize: scrolled ? "11px" : "12px",
           }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
-          Taqieuddin
+          Taqieuddin Zailan.
         </motion.span>
 
         {/* Nav Links */}
@@ -92,8 +92,8 @@ export default function Navbar() {
                 onClick={() => scrollToSection(item.id)}
                 className="relative font-medium whitespace-nowrap"
                 animate={{
-                  color: scrolled ? "#374151" : "#ffffff",
-                  fontSize: scrolled ? "13px" : "14px",
+                  color: scrolled ? "#225a3b" : "#ffffff",
+                  fontSize: scrolled ? "11px" : "12px",
                 }}
                 whileHover={{ opacity: 0.6 }}
                 whileTap={{ scale: 0.95 }}
@@ -110,19 +110,21 @@ export default function Navbar() {
           onClick={() => scrollToSection("contact")}
           className="rounded-full font-medium cursor-pointer whitespace-nowrap"
           animate={{
-            backgroundColor: scrolled ? "#1a1a1a" : "#ffffff",
-            color: scrolled ? "#ffffff" : "#1a1a1a",
-            paddingTop: scrolled ? 6 : 8,
-            paddingBottom: scrolled ? 6 : 8,
+            backgroundColor: scrolled ? "#1d4831" : "rgba(255, 255, 255, 0)",
+            color: scrolled ? "#ffffff" : "#ffffff",
+            borderWidth: 1,
+            borderColor: scrolled ? "transparent" : "rgba(255, 255, 255, 0.4)",
+            paddingTop: scrolled ? 6 : 7,
+            paddingBottom: scrolled ? 6 : 7,
             paddingLeft: scrolled ? 16 : 20,
             paddingRight: scrolled ? 16 : 20,
-            fontSize: scrolled ? "13px" : "14px",
+            fontSize: scrolled ? "11px" : "11px",
           }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
         >
-          Hire Me
+          Get In Touch
         </motion.button>
       </motion.nav>
     </div>
