@@ -32,7 +32,7 @@ export default function Contact() {
                         transition={{ duration: 0.5, delay: 0.1 }}
                         viewport={{ once: true }}
                     >
-                        Let's Work Together.
+                        Let&apos;s Work Together.
                     </motion.h2>
                 </div>
 
@@ -44,10 +44,10 @@ export default function Contact() {
                     viewport={{ once: true }}
                 >
                     <h3 className="text-3xl sm:text-4xl font-bold text-white mb-6 font-heading text-center">
-                        I'm currently seeking new opportunities.
+                        I&apos;m currently seeking new opportunities.
                     </h3>
                     <p className="text-[#8ec7a1] text-lg sm:text-xl mb-16 font-sans leading-relaxed text-center max-w-2xl">
-                        Whether you have an open position, an exciting project, or just want to say hi, my inbox is always open. I'll get back to you as soon as I can!
+                        Whether you have an open position, an exciting project, or just want to say hi, my inbox is always open. I&apos;ll get back to you as soon as I can!
                     </p>
 
                     <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-14 mb-16">

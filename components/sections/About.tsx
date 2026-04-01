@@ -98,8 +98,8 @@ export default function About() {
                                     <span>CGPA: <strong>3.81</strong></span>
                                 </li>
                                 <li className="flex items-start gap-2">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[#3c8d5d] mt-1.5 flex-shrink-0" />
-                                    <span><strong>Dean's List</strong> — 7/7 consecutive semesters</span>
+                                    <span className="w-1.5 h-1.5 rounded-full bg-[#3c8d5d]/50" />
+                                    <span><strong>Dean&apos;s List</strong> — 7/7 consecutive semesters</span>
                                 </li>
                                 <li className="flex items-start gap-2">
                                     <span className="w-1.5 h-1.5 rounded-full bg-[#3c8d5d] mt-1.5 flex-shrink-0" />
