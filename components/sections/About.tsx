@@ -11,26 +11,22 @@ export default function About() {
     return (
         <section
             id="about"
-            style={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', width: '100%' }}
-            className="bg-[#fcfdfc] overflow-hidden relative"
+            className="flex flex-col lg:flex-row min-h-screen w-full bg-[#fcfdfc] overflow-hidden relative"
         >
             {/* Left - Lanyard */}
             <div
-                style={{ width: '40%', height: '100vh', position: 'relative', flexShrink: 0 }}
-                className="pointer-events-auto cursor-grab active:cursor-grabbing"
+                className="w-full lg:w-[40%] h-[50vh] lg:h-screen relative shrink-0 pointer-events-auto cursor-grab active:cursor-grabbing"
             >
                 <Lanyard position={[0, 0, 16]} fov={16} gravity={[0, -40, 0]} />
             </div>
 
             {/* Right - Content */}
             <div
-                style={{ width: '60%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                className="px-6 sm:px-10 lg:px-14 py-12 z-10"
+                className="w-full lg:w-[60%] flex items-center justify-center px-4 sm:px-10 lg:px-14 py-12 lg:py-12 z-10"
             >
                 {/* Premium Card with Animated Gradient Border */}
                 <div
-                    style={{ width: '100%', maxWidth: '640px' }}
-                    className="about-card p-8 sm:p-10 lg:p-12"
+                    className="about-card w-full max-w-[640px] p-6 sm:p-10 lg:p-12"
                 >
                     {/* ShapeBlur Background - subtle texture */}
                     <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
