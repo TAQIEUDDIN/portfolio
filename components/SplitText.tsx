@@ -48,12 +48,14 @@ const SplitText: React.FC<SplitTextProps> = ({
   }, [onLetterAnimationComplete]);
 
   useEffect(() => {
+    const markLoaded = () => {
+      queueMicrotask(() => setFontsLoaded(true));
+    };
+
     if (document.fonts.status === 'loaded') {
-      setFontsLoaded(true);
+      markLoaded();
     } else {
-      document.fonts.ready.then(() => {
-        setFontsLoaded(true);
-      });
+      document.fonts.ready.then(markLoaded);
     }
   }, []);
 
@@ -162,7 +164,7 @@ const SplitText: React.FC<SplitTextProps> = ({
       willChange: 'transform, opacity'
     };
     const classes = `split-parent overflow-hidden inline-block whitespace-normal ${className}`;
-    const Tag = (tag || 'p') as any;
+    const Tag = (tag ?? 'p') as React.ElementType;
 
     return (
       <Tag ref={ref} style={style} className={classes}>

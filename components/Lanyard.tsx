@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState, Suspense } from 'react';
+import { useEffect, useRef, useState, Suspense, useMemo } from 'react';
 import { Canvas, extend, useFrame } from '@react-three/fiber';
 import { useGLTF, useTexture, Environment, Lightformer } from '@react-three/drei';
 import {
@@ -9,15 +9,18 @@ import {
   RigidBody,
   useRopeJoint,
   useSphericalJoint,
-  RigidBodyProps
+  RigidBodyProps,
+  RapierRigidBody
 } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
 import * as THREE from 'three';
+import type { ThreeEvent } from '@react-three/fiber';
 
 // Using static paths from the public directory with cache-busting
 const cardGLB = '/card.glb?v=2';
 const lanyardPng = '/lanyard.png';
 
+// @ts-expect-error extending generic three.js classes from meshline
 extend({ MeshLineGeometry, MeshLineMaterial });
 
 interface LanyardProps {
@@ -33,11 +36,13 @@ export default function Lanyard({
   fov = 20,
   transparent = true
 }: LanyardProps) {
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth < 768;
+  });
 
   useEffect(() => {
-    setIsMobile(window.innerWidth < 768);
-    const handleResize = (): void => setIsMobile(window.innerWidth < 768);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -99,30 +104,47 @@ interface BandProps {
 }
 
 function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
-  // Using "any" for refs since the exact types depend on Rapier's internals
-  const band = useRef<any>(null);
-  const fixed = useRef<any>(null);
-  const j1 = useRef<any>(null);
-  const j2 = useRef<any>(null);
-  const j3 = useRef<any>(null);
-  const card = useRef<any>(null);
+  const band = useRef<THREE.Mesh | null>(null);
+  const fixed = useRef<RapierRigidBody>(null!);
+  const j1 = useRef<RapierRigidBody>(null!);
+  const j2 = useRef<RapierRigidBody>(null!);
+  const j3 = useRef<RapierRigidBody>(null!);
+  const card = useRef<RapierRigidBody>(null!);
 
   const vec = new THREE.Vector3();
   const ang = new THREE.Vector3();
   const rot = new THREE.Vector3();
   const dir = new THREE.Vector3();
 
-  const segmentProps: any = {
-    type: 'dynamic' as RigidBodyProps['type'],
+  const segmentProps: RigidBodyProps = {
+    type: 'dynamic',
     canSleep: true,
     colliders: false,
     angularDamping: 4,
     linearDamping: 4
   };
 
-  const { nodes, materials } = useGLTF(cardGLB) as any;
-  // Get the string path for the texture due to Next.js static asset setup
-  const texture = useTexture(lanyardPng);
+  type CardGLTF = {
+    nodes: {
+      card: THREE.Mesh;
+      clip: THREE.Mesh;
+      clamp: THREE.Mesh;
+    };
+    materials: {
+      base: THREE.MeshPhysicalMaterial;
+      metal: THREE.Material;
+    };
+  };
+
+  const { nodes, materials } = useGLTF(cardGLB) as unknown as CardGLTF;
+  const loadedTexture = useTexture(lanyardPng);
+  const texture = useMemo(() => loadedTexture.clone(), [loadedTexture]);
+
+  useEffect(() => {
+    texture.wrapS = THREE.RepeatWrapping;
+    texture.wrapT = THREE.RepeatWrapping;
+    texture.needsUpdate = true;
+  }, [texture]);
 
   const [curve] = useState(
     () =>
@@ -160,28 +182,33 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
         z: vec.z - dragged.z
       });
     }
-    if (fixed.current) {
-      [j1, j2].forEach(ref => {
-        if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
-        const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
-        ref.current.lerped.lerp(
-          ref.current.translation(),
-          delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
-        );
-      });
-      curve.points[0].copy(j3.current.translation());
-      curve.points[1].copy(j2.current.lerped);
-      curve.points[2].copy(j1.current.lerped);
-      curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
-      ang.copy(card.current.angvel());
-      rot.copy(card.current.rotation());
-      card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
-    }
+      if (fixed.current && j1.current && j2.current && j3.current && card.current && band.current) {
+        [j1, j2].forEach(ref => {
+          if (!ref.current) return;
+          // @ts-expect-error lerped is a custom property attached for animation
+          if (!ref.current.lerped) ref.current.lerped = new THREE.Vector3().copy(ref.current.translation());
+          // @ts-expect-error lerped is a custom property
+          const clampedDistance = Math.max(0.1, Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())));
+          // @ts-expect-error lerped is a custom property
+          ref.current.lerped.lerp(
+            ref.current!.translation(),
+            delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
+          );
+        });
+        curve.points[0].copy(j3.current.translation());
+        // @ts-expect-error lerped is a custom property
+        curve.points[1].copy(j2.current.lerped);
+        // @ts-expect-error lerped is a custom property
+        curve.points[2].copy(j1.current.lerped);
+        curve.points[3].copy(fixed.current.translation());
+        (band.current.geometry as any).setPoints(curve.getPoints(isMobile ? 16 : 32));
+        ang.copy(card.current.angvel());
+        rot.copy(card.current.rotation());
+        card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z }, true);
+      }
   });
 
   curve.curveType = 'chordal';
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
   return (
     <>
@@ -208,13 +235,13 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
-            onPointerUp={(e: any) => {
-              e.target.releasePointerCapture(e.pointerId);
+            onPointerUp={(e: ThreeEvent<PointerEvent>) => {
+              (e.target as Element).releasePointerCapture(e.pointerId);
               drag(false);
             }}
-            onPointerDown={(e: any) => {
-              e.target.setPointerCapture(e.pointerId);
-              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current.translation())));
+            onPointerDown={(e: ThreeEvent<PointerEvent>) => {
+              (e.target as Element).setPointerCapture(e.pointerId);
+              drag(new THREE.Vector3().copy(e.point).sub(vec.copy(card.current!.translation())));
             }}
           >
             <mesh geometry={nodes.card.geometry}>
@@ -233,9 +260,9 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }: BandProps) {
         </RigidBody>
       </group>
       <mesh ref={band}>
-        {/* @ts-ignore */}
+        {/* @ts-expect-error meshline JSX elements are provided via extend() */}
         <meshLineGeometry />
-        {/* @ts-ignore */}
+        {/* @ts-expect-error meshline JSX elements are provided via extend() */}
         <meshLineMaterial
           color="white"
           depthTest={false}
