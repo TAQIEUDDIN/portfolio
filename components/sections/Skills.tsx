@@ -71,13 +71,13 @@ const achievements = [
 export default function Skills() {
     return (
         <section id="skills" className="relative w-full min-h-screen py-24 sm:py-32 overflow-hidden" style={{ backgroundColor: "#112b1e" }}>
-            
+
             {/* Background Glows matching Hero */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[500px] bg-[rgba(34,90,59,0.15)] blur-[120px] rounded-full pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[rgba(60,141,93,0.1)] blur-[150px] rounded-full pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-14 relative z-10 flex flex-col items-center">
-                
+
                 {/* Header */}
                 <div className="text-center max-w-3xl mb-16">
                     <motion.p
@@ -87,7 +87,7 @@ export default function Skills() {
                         transition={{ duration: 0.5 }}
                         viewport={{ once: true }}
                     >
-                        Arsenal & Accolades
+                        Skills & Achievements
                     </motion.p>
                     <motion.h2
                         className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight font-heading"
@@ -101,7 +101,7 @@ export default function Skills() {
                 </div>
 
                 {/* Logo Loop - Tech Stack */}
-                <motion.div 
+                <motion.div
                     className="w-full mb-32"
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
@@ -154,15 +154,15 @@ export default function Skills() {
                                 transition={{ duration: 0.6, delay: i * 0.15, ease: "easeOut" }}
                                 viewport={{ once: true, margin: "-50px" }}
                             >
-                                <Image 
-                                    src={achievement.image} 
-                                    alt={achievement.title} 
-                                    fill 
+                                <Image
+                                    src={achievement.image}
+                                    alt={achievement.title}
+                                    fill
                                     className="object-cover opacity-60 group-hover:opacity-40 group-hover:scale-110 transition-all duration-700 ease-in-out"
                                 />
-                                
+
                                 <div className="absolute inset-0 bg-gradient-to-t from-[#112b1e] via-[#112b1e]/50 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
-                                
+
                                 <div className="absolute inset-0 p-8 flex flex-col justify-end">
                                     <div className="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                                         <div className="inline-block px-3 py-1 mb-3 rounded-full bg-[#fcfdfc]/10 backdrop-blur-xl border border-white/10 text-[#8ec7a1] text-xs font-bold tracking-wider uppercase shadow-xl">
