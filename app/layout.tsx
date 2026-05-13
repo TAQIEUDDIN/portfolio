@@ -8,9 +8,8 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
   subsets: ["latin"],
 });
 
