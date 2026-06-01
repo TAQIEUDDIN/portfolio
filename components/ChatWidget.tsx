@@ -8,7 +8,7 @@ import React, {
   type FormEvent,
   type KeyboardEvent,
 } from "react";
-import { MessageCircle, X, Send, ChevronDown, ChevronUp } from "lucide-react";
+import { BotMessageSquare, X, Send, ChevronDown, ChevronUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 
 /* ─────────────────────── Types ─────────────────────── */
@@ -349,7 +349,7 @@ export default function ChatWidget() {
             isOpen ? "rotate-90 scale-0 opacity-0" : "rotate-0 scale-100 opacity-100"
           }`}
         >
-          <MessageCircle className="size-6" />
+          <BotMessageSquare className="size-6" />
         </span>
         <span
           className={`absolute transition-all duration-300 ${
